@@ -1,0 +1,168 @@
+package gui;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.BoxLayout;
+public class billingsystem {
+	private Frame f;
+	private Panel p,infopanel, centerpanel,infopanelbt,orderpanel,leftpanel,billpanel;
+	private Button b;
+	private Label l;
+	private Label totalamoublb,discountlb,taxlb,amounttendered,change;
+	private Button clearbt, computebt, corderbt;
+	private TextField tamtf,disctf,taxtf,amttentf,changetf;
+	private TextField[] qtyfields = new TextField[8];
+	private TextField[] subtotalf = new TextField[8];
+	private TextArea BillArea;
+	String[] name = {"Coke","RedHorse","Cuervo","Black Label","Smirnoff","Alfonso","Sprite","Royal"};
+	double[] price = {70,100,240,500,700,150,450,100};
+	
+	
+	private int totalorder;
+	int orderid=1;
+	double totalamount = 0.0;
+	public billingsystem() {
+		
+	//UI OF THE SYSTEM
+		
+		
+		
+		l = new Label("Nico's Grocery Store");
+		l.setAlignment(Label.CENTER);
+		f = new Frame("BILLING SYSTEM");
+		f.setLayout(new BorderLayout());
+		f.setSize(800, 500);
+		infopanel = new Panel();
+		infopanel.setSize(200,200);
+		infopanel.setLayout(new GridLayout(6,2,5,5));
+		totalamoublb = new Label("Total Amount:");
+		tamtf = new TextField();
+		tamtf.setEditable(false);
+		taxlb = new Label("Tax:");
+		taxtf = new TextField();
+		taxtf.setEditable(false);
+		discountlb = new Label("Discount:");
+		disctf = new TextField();
+		amounttendered = new Label("Amount Tendered:");
+		amttentf = new TextField();
+		change = new Label("CHANGE");
+	
+		
+		computebt = new Button("Compute");
+		corderbt = new Button("Cancel Order");
+		clearbt = new Button("Clear");
+		changetf = new TextField();
+		changetf.setEditable(false);
+		infopanel.add(totalamoublb);
+		infopanel.add(tamtf);
+		infopanel.add(taxlb);
+		infopanel.add(taxtf);
+		infopanel.add(discountlb);
+		infopanel.add(disctf);
+		infopanel.add(amounttendered);
+		infopanel.add(amttentf);
+		infopanel.add(change);
+		infopanel.add(changetf);
+		//infopanelbt
+		infopanelbt =new Panel();
+		infopanelbt.setSize(200,200);
+		infopanelbt.setLayout(new GridLayout(1,3,5,5));
+		infopanelbt.add(computebt);
+		infopanelbt.add(corderbt);
+		infopanelbt.add(clearbt);
+		
+		
+		//
+		//centerpanel
+		
+		centerpanel = new Panel();
+		centerpanel.setLayout(new BoxLayout(centerpanel,BoxLayout.Y_AXIS));
+		centerpanel.add(infopanel);
+		
+
+		
+		//orderpanel
+		orderpanel = new Panel(new GridLayout(10,5));
+		orderpanel.add(new Label("OrderID"));
+		orderpanel.add(new Label("Order Description"));
+		orderpanel.add(new Label("Quantity"));
+		orderpanel.add(new Label("Sub-Total"));
+		orderpanel.add(new Label("Compute"));
+		
+		for(int i=0; i<8;i++) {
+			orderpanel.add(new Label(String.valueOf(i+1)));
+			orderpanel.add(new Label(name[i]));
+			qtyfields[i] = new TextField("0");
+			orderpanel.add(qtyfields[i]);
+			subtotalf[i] = new TextField("0.00");
+			subtotalf[i].setEditable(false);
+			orderpanel.add(subtotalf[i]);
+			Button computebtn = new Button ("Compute");
+			orderpanel.add(computebtn);
+			final int index =i;
+		}
+		
+		leftpanel = new Panel();
+		leftpanel.setLayout(new BoxLayout(leftpanel,BoxLayout.Y_AXIS));
+		leftpanel.add(orderpanel);
+		leftpanel.add(infopanelbt);
+	
+		//billpanel
+		billpanel = new Panel(new BorderLayout());
+		billpanel.setPreferredSize(new Dimension(200,400));
+		  BillArea = new TextArea(10, 20);
+	        BillArea.setEditable(false);
+	         
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+		
+		
+		// BUTTONS 
+		f.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			
+			}
+		});
+		
+		
+		
+		
+		
+		// methods for processing items
+		
+	}
+	private int getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public void startAPP() {
+		f.setVisible(true);
+		f.add(l,BorderLayout.NORTH);
+		f.add(leftpanel,BorderLayout.CENTER);
+		f.add(centerpanel,BorderLayout.EAST);
+		
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		billingsystem bs = new billingsystem();
+		bs.startAPP();
+	}
+
+
+}
+
+
+
+	
+
