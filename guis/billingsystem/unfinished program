@@ -1,168 +1,380 @@
 package gui;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.awt.event.*;
 import javax.swing.BoxLayout;
+
 public class billingsystem {
-	private Frame f;
-	private Panel p,infopanel, centerpanel,infopanelbt,orderpanel,leftpanel,billpanel;
-	private Button b;
-	private Label l;
-	private Label totalamoublb,discountlb,taxlb,amounttendered,change;
-	private Button clearbt, computebt, corderbt;
-	private TextField tamtf,disctf,taxtf,amttentf,changetf;
-	private TextField[] qtyfields = new TextField[8];
-	private TextField[] subtotalf = new TextField[8];
-	private TextArea BillArea;
-	String[] name = {"Coke","RedHorse","Cuervo","Black Label","Smirnoff","Alfonso","Sprite","Royal"};
-	double[] price = {70,100,240,500,700,150,450,100};
-	
-	
-	private int totalorder;
-	int orderid=1;
-	double totalamount = 0.0;
-	public billingsystem() {
-		
-	//UI OF THE SYSTEM
-		
-		
-		
-		l = new Label("Nico's Grocery Store");
-		l.setAlignment(Label.CENTER);
-		f = new Frame("BILLING SYSTEM");
-		f.setLayout(new BorderLayout());
-		f.setSize(800, 500);
-		infopanel = new Panel();
-		infopanel.setSize(200,200);
-		infopanel.setLayout(new GridLayout(6,2,5,5));
-		totalamoublb = new Label("Total Amount:");
-		tamtf = new TextField();
-		tamtf.setEditable(false);
-		taxlb = new Label("Tax:");
-		taxtf = new TextField();
-		taxtf.setEditable(false);
-		discountlb = new Label("Discount:");
-		disctf = new TextField();
-		amounttendered = new Label("Amount Tendered:");
-		amttentf = new TextField();
-		change = new Label("CHANGE");
-	
-		
-		computebt = new Button("Compute");
-		corderbt = new Button("Cancel Order");
-		clearbt = new Button("Clear");
-		changetf = new TextField();
-		changetf.setEditable(false);
-		infopanel.add(totalamoublb);
-		infopanel.add(tamtf);
-		infopanel.add(taxlb);
-		infopanel.add(taxtf);
-		infopanel.add(discountlb);
-		infopanel.add(disctf);
-		infopanel.add(amounttendered);
-		infopanel.add(amttentf);
-		infopanel.add(change);
-		infopanel.add(changetf);
-		//infopanelbt
-		infopanelbt =new Panel();
-		infopanelbt.setSize(200,200);
-		infopanelbt.setLayout(new GridLayout(1,3,5,5));
-		infopanelbt.add(computebt);
-		infopanelbt.add(corderbt);
-		infopanelbt.add(clearbt);
-		
-		
-		//
-		//centerpanel
-		
-		centerpanel = new Panel();
-		centerpanel.setLayout(new BoxLayout(centerpanel,BoxLayout.Y_AXIS));
-		centerpanel.add(infopanel);
-		
+    private Frame f;
+    private Panel p, infopanel, centerpanel, infopanelbt, orderpanel, leftpanel, billpanel, cashdate, headerpanel;
+    private Button enterbutton;
+    private Label l;
+    private Label totalorder, totalamoublb, discountlb, taxlb, amounttendered, change;
+    private Button clearbt, computebt, corderbt;
+    private TextField totalorderf, tamtf, disctf, taxtf, amttentf, changetf;
+    private TextField[] qtyfields = new TextField[8];
+    private TextField[] subtotalf = new TextField[8];
+    ImagePanel imagePanel;
+    int index;
+    String[] name = {"Coke", "RedHorse", "Cuervo", "Black Label", "Smirnoff", "Alfonso", "Sprite", "Royal"};
+    double[] price = {70, 100, 240, 500, 700, 150, 450, 100};
+    int orderid = 1;
+    double totalamount = 0.0;
+    int totalorderq;
 
-		
-		//orderpanel
-		orderpanel = new Panel(new GridLayout(10,5));
-		orderpanel.add(new Label("OrderID"));
-		orderpanel.add(new Label("Order Description"));
-		orderpanel.add(new Label("Quantity"));
-		orderpanel.add(new Label("Sub-Total"));
-		orderpanel.add(new Label("Compute"));
-		
-		for(int i=0; i<8;i++) {
-			orderpanel.add(new Label(String.valueOf(i+1)));
-			orderpanel.add(new Label(name[i]));
-			qtyfields[i] = new TextField("0");
-			orderpanel.add(qtyfields[i]);
-			subtotalf[i] = new TextField("0.00");
-			subtotalf[i].setEditable(false);
-			orderpanel.add(subtotalf[i]);
-			Button computebtn = new Button ("Compute");
-			orderpanel.add(computebtn);
-			final int index =i;
-		}
-		
-		leftpanel = new Panel();
-		leftpanel.setLayout(new BoxLayout(leftpanel,BoxLayout.Y_AXIS));
-		leftpanel.add(orderpanel);
-		leftpanel.add(infopanelbt);
-	
-		//billpanel
-		billpanel = new Panel(new BorderLayout());
-		billpanel.setPreferredSize(new Dimension(200,400));
-		  BillArea = new TextArea(10, 20);
-	        BillArea.setEditable(false);
-	         
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	
-		
-		
-		
-		// BUTTONS 
-		f.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			
-			}
-		});
-		
-		
-		
-		
-		
-		// methods for processing items
-		
-	}
-	private int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	public void startAPP() {
-		f.setVisible(true);
-		f.add(l,BorderLayout.NORTH);
-		f.add(leftpanel,BorderLayout.CENTER);
-		f.add(centerpanel,BorderLayout.EAST);
-		
-	}
+    public billingsystem() {
+       ////////////////////// // UI OF THE SYSTEM///////////////////////////////////////////////////////
+        imagePanel = new ImagePanel("C:/Users/Nicolas Martin/OneDrive/Documents/GUI/nico.jpg", 120, 120);
+        l = new Label("Nico's Grocery Store");
+        l.setFont(new Font("Arial",Font.BOLD,50));
+        l.setForeground(Color.white);
+        l.setAlignment(Label.CENTER);
+        f = new Frame("BILLING SYSTEM");
+        f.setLayout(new BorderLayout());
+        f.setSize(1000, 600);
+        f.setBackground(new Color(238, 229, 251));
+        f.setResizable(false);
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		billingsystem bs = new billingsystem();
-		bs.startAPP();
-	}
+        ////////////HEADERPANEL////////////
+        headerpanel = new Panel();
+        headerpanel.setPreferredSize(new Dimension(80, 150));
+        headerpanel.setBackground(new Color(48,53,120));
+        headerpanel.add(imagePanel, BorderLayout.NORTH);
+        headerpanel.add(l, BorderLayout.SOUTH);
 
+        ////////////INFOPANEL////////////
+        infopanel = new Panel();
+        infopanel.setSize(200, 200);
+        infopanel.setLayout(new GridLayout(7, 2, 10, 10));
+        totalamoublb = new Label("Total Amount:");
+        tamtf = new TextField("0.00");
+        tamtf.setEditable(false);
+        taxlb = new Label(" Tax(%):");
+        taxtf = new TextField("16.0");
+        taxtf.setEditable(false);
+        discountlb = new Label(" Discount:");
+        disctf = new TextField("0.00");
+        amounttendered = new Label(" Amount Tendered:");
+        amttentf = new TextField("0.00");
+        change = new Label(" Change:");
+        totalorder = new Label(" Total Order:");
+        totalorderf = new TextField("0");
+        totalorderf.setEditable(false);
+        computebt = new Button(" Compute");
+        computebt.setPreferredSize(new Dimension(150, 100));
+        corderbt = new Button(" Cancel Order");
+        corderbt.setPreferredSize(new Dimension(150, 100));
+        clearbt = new Button(" Clear");
+        clearbt.setPreferredSize(new Dimension(150, 100));
+        changetf = new TextField("0.00");
+        changetf.setEditable(false);
+        Label space = new Label(" Enter Order:");
+        infopanel.add(totalorder);
+        infopanel.add(totalorderf);
+        infopanel.add(totalamoublb);
+        infopanel.add(tamtf);
+        infopanel.add(taxlb);
+        infopanel.add(taxtf);
+        infopanel.add(discountlb);
+        infopanel.add(disctf);
+        infopanel.add(amounttendered);
+        infopanel.add(amttentf);
+        infopanel.add(change);
+        infopanel.add(changetf);
+        enterbutton = new Button("Enter Order");
+        enterbutton.setBackground(Color.yellow);
+        enterbutton.setPreferredSize(new Dimension(150, 100));
+        infopanel.add(space);
+        infopanel.add(enterbutton);
+        
+        ////////////infopanelbt////////////
+        infopanelbt = new Panel();
+        infopanelbt.setPreferredSize(new Dimension(100, 50));
+        infopanelbt.setLayout(new GridLayout(1, 3, 10, 10));
+        infopanelbt.add(computebt);
+        infopanelbt.add(corderbt);
+        infopanelbt.add(clearbt);
+
+        ////////////date and cashiername panel////////////
+        cashdate = new Panel();
+        cashdate.setPreferredSize(new Dimension(200, 200));
+        cashdate.setLayout(new GridLayout(2, 2, 5, 5));
+        Label namelb = new Label("Cashier Name:");
+        TextField namef = new TextField("Nicolas Martin Obra");
+        namef.setEditable(false);
+        Label datelb = new Label("Date:");
+        TextField date = new TextField();
+        date.setEditable(false);
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        date.setText(today.format(formatter));
+        cashdate.add(namelb);
+        cashdate.add(namef);
+        cashdate.add(datelb);
+        cashdate.add(date);
+
+        ////////////centerpanel////////////
+        centerpanel = new Panel();
+        centerpanel.setLayout(new BoxLayout(centerpanel, BoxLayout.Y_AXIS));
+        centerpanel.add(infopanel);
+        centerpanel.add(cashdate);
+
+        ////////////orderpanel////////////
+        orderpanel = new Panel(new GridLayout(10, 6, 5, 5));
+        
+        orderpanel.add(new Label("OrderID"));
+        orderpanel.add(new Label("Order Description"));
+        orderpanel.add(new Label(" Price"));
+        orderpanel.add(new Label("Quantity"));
+        orderpanel.add(new Label("Sub-Total"));
+        orderpanel.add(new Label("Compute"));
+        
+
+        for (int i = 0; i < 8; i++) {
+            orderpanel.add(new Label(String.valueOf(i + 1)));
+            orderpanel.add(new Label(name[i]));
+            qtyfields[i] = new TextField("0");
+
+            orderpanel.add(new Label(String.valueOf(price[i])));
+            orderpanel.add(qtyfields[i]);
+            subtotalf[i] = new TextField("0.00");
+            subtotalf[i].setEditable(false);
+            orderpanel.add(subtotalf[i]);
+            Button computebtn = new Button("Compute");
+            orderpanel.add(computebtn);
+            int index = i;
+            computebtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    computesubtotal(index);
+                }
+            });
+        }
+        ////////////LEFTPANEL////////////
+        leftpanel = new Panel();
+        leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
+        leftpanel.add(orderpanel);
+        leftpanel.add(infopanelbt);
+
+        ////////////BUTTONS//////////// 
+        f.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+
+            }
+        });
+        computebt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                computeorder();
+
+            }
+        });
+        corderbt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearfield();
+            }
+        });
+        clearbt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearfield();
+            }
+        });
+        enterbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Purchasing();
+            }
+        });
+
+    }
+
+    // Utility method to show AWT modal error dialog with message
+    private void showErrorDialog(String message) {
+        Dialog dialog = new Dialog(f, "Error", true);
+        dialog.setLayout(new BorderLayout());
+        Label msg = new Label(message);
+        msg.setAlignment(Label.CENTER);
+        dialog.add(msg, BorderLayout.CENTER);
+        Button ok = new Button("OK");
+        ok.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dialog.setVisible(false);
+                dialog.dispose();
+            }
+        });
+        Panel panel = new Panel();
+        panel.add(ok);
+        dialog.add(panel, BorderLayout.SOUTH);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(f);
+        dialog.setVisible(true);
+    }
+    ////////////////////////METHODS////////////////////////
+    public void computeorder() {
+        totalorderq = 0; 
+        double discountPercentage = 0.0;
+        double taxRate = 0.0;
+        try {
+            discountPercentage = Double.parseDouble(disctf.getText());
+            if (discountPercentage < 0 || discountPercentage > 100) {
+                showErrorDialog("Discount must be between 0 and 100.");
+                disctf.setText("0.00");
+                return;
+            }
+            taxRate = Double.parseDouble(taxtf.getText());
+            if (taxRate < 0) {
+                showErrorDialog("Tax rate cannot be negative.");
+                taxtf.setText("16.0");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showErrorDialog("Invalid discount or tax value.");
+            disctf.setText("0.00");
+            taxtf.setText("16.0");
+            return;
+        }
+        double discount = discountPercentage / 100.0;
+        double taxDecimal = taxRate / 100.0;
+        double itemTotal = 0;
+
+        // Calculate total quantity and item total
+        for (int i = 0; i < qtyfields.length; i++) {
+            try {
+                int qty = Integer.parseInt(qtyfields[i].getText());
+                if (qty < 0) {
+                    showErrorDialog("Quantity for " + name[i] + " cannot be negative.");
+                    qtyfields[i].setText("0");
+                    subtotalf[i].setText("0.00");
+                    return;
+                }
+                totalorderq += qty;
+                double subtotal = price[i] * qty;
+                itemTotal += subtotal;
+                subtotalf[i].setText(String.format("%.2f", subtotal));
+            } catch (NumberFormatException nfe) {
+                showErrorDialog("Invalid quantity for " + name[i] + ".");
+                qtyfields[i].setText("0");
+                subtotalf[i].setText("0.00");
+                return;
+            }
+        }
+
+        // Calculate tax and total amount
+        double taxAmount = itemTotal * taxDecimal;
+        double totalAmount = itemTotal + taxAmount - (itemTotal * discount);
+
+        // Set the fields with calculated values
+        totalorderf.setText(String.valueOf(totalorderq));
+        tamtf.setText(String.format("%.2f", totalAmount));
+        totalamount = totalAmount;
+    }
+
+    public void Purchasing() {
+        try {
+            Double amountTendered = Double.parseDouble(amttentf.getText());
+            if (amountTendered < 0) {
+                showErrorDialog("Amount tendered cannot be negative.");
+                amttentf.setText("0.00");
+                changetf.setText("0.00");
+                return;
+            }
+            if (amountTendered < totalamount) {
+                showErrorDialog("Amount tendered is less than total amount.");
+                changetf.setText("0.00");
+            } else {
+                Double change = amountTendered - totalamount;
+                changetf.setText(String.format("%.2f", change));
+            }
+        } catch (NumberFormatException nfe) {
+            showErrorDialog("Invalid amount tendered.");
+            amttentf.setText("0.00");
+            changetf.setText("0.00");
+        }
+    }
+
+    private void computesubtotal(int index) {
+        try {
+            int qty = Integer.parseInt(qtyfields[index].getText());
+            if (qty < 0) {
+                showErrorDialog("Quantity cannot be negative.");
+                qtyfields[index].setText("0");
+                subtotalf[index].setText("0.00");
+                return;
+            }
+            double subtotal = price[index] * qty;
+            subtotalf[index].setText(String.format("%.2f", subtotal));
+        } catch (NumberFormatException nfe) {
+            showErrorDialog("Invalid quantity. Please enter a number.");
+            qtyfields[index].setText("0");
+            subtotalf[index].setText("0.00");
+        }
+    }
+    ////////////CLEARFIELD////////////
+    public void clearfield() {
+        totalorderf.setText("0");
+        tamtf.setText("0.00");
+        disctf.setText("0.0");
+        amttentf.setText("0.00");
+        changetf.setText("0.00");
+
+        for (TextField qtyfield : qtyfields) {
+            qtyfield.setText("0");
+        }
+        for (TextField subtotalf : subtotalf) {
+            subtotalf.setText("0.00");
+        }
+    }
+    ////////////STARTAPP////////////
+    public void startAPP() {
+        f.setVisible(true);
+        f.add(headerpanel, BorderLayout.NORTH);
+        f.add(leftpanel, BorderLayout.CENTER);
+        f.add(centerpanel, BorderLayout.EAST);
+
+    }
+
+    public static void main(String[] args) {
+        billingsystem bs = new billingsystem();
+        bs.startAPP();
+    }
 
 }
+////////////IMAGEPANEL TO LOAD IMAGE////////////
+class ImagePanel extends Panel {
+    private Image image;
+    private Image scaledImage;
+    private int width;
+    private int height;
 
+    public ImagePanel(String imagePath, int width, int height) {
+        this.width = width;
+        this.height = height;
+        image = Toolkit.getDefaultToolkit().getImage(imagePath);
 
+        // Use MediaTracker to ensure the image is loaded
+        MediaTracker tracker = new MediaTracker(this);
+        tracker.addImage(image, 0);
+        try {
+            tracker.waitForAll();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        scaledImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    }
 
-	
+    @Override
+    public void paint(Graphics g) {
+        g.drawImage(scaledImage, 0, 0, this);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(width, height);
+    }
+}
 
